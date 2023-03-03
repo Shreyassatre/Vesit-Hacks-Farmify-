@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tracking</title>
+    <title>Delivery</title>
+    <link rel="stylesheet" href="./styles/style.css">
     <link rel="shortcut icon" href="ico.jpg" type="image/x-icon">
     <!-- leaflet-links -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
         integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-        <!-- leaflet-routing-machine -->
+    <!-- leaflet-routing-machine -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 </head>
 <style>
     #map {
@@ -25,16 +26,42 @@
 </style>
 
 <body>
+    <div id="customAlert">
+        <div id="box">
+            <div class="heading">
+                Alert!
+            </div>
+            <div class="content">
+                <p>Hey!Please Select a delivery location by clicking on the map!</p>
+                <button type="button" id="confirmation" onclick="hidealert()">Ok</button>
+            </div>
+        </div>
+    </div>
+    
     <div id="map">
     </div>
 
+
+
 </body>
 <script>
+    window.onload = function customAlert(){
+        var customalert = document.getElementById("customAlert");
+        customalert.style.display = "block";
+    }
+    
+    function hidealert(){
+        var customalert = document.getElementById("customAlert");
+        customalert.style.display = "none";
+    }
+    
     var map = L.map('map').setView([19.2201, 72.9748], 12);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
+
+    // prompt("hi")
 
     var greenIcon = L.icon({
         iconUrl: './assets/leaf-green.png',
@@ -49,12 +76,12 @@
     // 19.2660, 72.9845
     L.marker([19.2660, 72.9845], { icon: greenIcon }).addTo(map).bindPopup("<b>Farmer location");
 
-        var taxiIcon = L.icon({
-			iconUrl: './assets/truck.png',
-			iconSize: [70, 70]
-		})
+    var taxiIcon = L.icon({
+        iconUrl: './assets/truck.png',
+        iconSize: [70, 70]
+    })
 
-		var marker = L.marker([19.2660, 72.9845], { icon: taxiIcon }).addTo(map);
+    var marker = L.marker([19.2660, 72.9845], { icon: taxiIcon }).addTo(map);
 
     var greenIcon = L.icon({
         iconUrl: './assets/leaf-red.png',
@@ -67,9 +94,9 @@
         popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
     // 19.1829633, 72.9758615
-    L.marker([19.1829633, 72.9758615], { icon: greenIcon }).addTo(map).bindPopup("<b>Delivery Location");
+    // L.marker([19.1829633, 72.9758615], { icon: greenIcon }).addTo(map).bindPopup("<b>Delivery Location");
 
-    
+
 
     var circle = L.circle([19.2660, 72.9845], {
         color: 'green',
@@ -77,34 +104,34 @@
         fillOpacity: 0.5,
         radius: 400
     }).addTo(map);
-    var circle2 = L.circle([19.1829633, 72.9758615], {
-        color: 'maroon',
-        fillColor: 'red',
-        fillOpacity: 0.5,
-        radius: 400
-    }).addTo(map);
+    // var circle2 = L.circle([19.1829633, 72.9758615], {
+    //     color: 'maroon',
+    //     fillColor: 'red',
+    //     fillOpacity: 0.5,
+    //     radius: 400
+    // }).addTo(map);
 
     map.on('click', function (e) {
-			console.log(e)
-		
-			L.Routing.control({
-				waypoints: [
-					L.latLng(19.2660, 72.9845),
-					L.latLng(19.1829633, 72.9758615)
-				],
-                createMarker: function() { return null; },
-			}).on('routesfound', function (e) {
-				var routes = e.routes;
-				console.log(routes);
+        console.log(e)
+        var newMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+        L.Routing.control({
+            waypoints: [
+                L.latLng(19.2660, 72.9845),
+                L.latLng(e.latlng.lat, e.latlng.lng)
+            ],
+            createMarker: function () { return null; },
+        }).on('routesfound', function (e) {
+            var routes = e.routes;
+            console.log(routes);
 
-				e.routes[0].coordinates.forEach(function (coord, index) {
-					setTimeout(function () {
-						marker.setLatLng([coord.lat, coord.lng]);
-					}, 100 * index)
-				})
+            e.routes[0].coordinates.forEach(function (coord, index) {
+                setTimeout(function () {
+                    marker.setLatLng([coord.lat, coord.lng]);
+                }, 100 * index)
+            })
 
-			}).addTo(map);
-		});
+        }).addTo(map);
+    });
 
 </script>
 
