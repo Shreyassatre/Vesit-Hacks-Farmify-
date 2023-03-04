@@ -12,12 +12,18 @@ body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
 }
-/* .background_img{
-  z-index: -1;
+.background_img{
+  /* z-index: -1;
   position: fixed;
-  top:5%;
+  top:5%; */
+  height: 1.5rem;
+  width: 100vw;
   transform: rotate(-90deg);
-} */
+  position: absolute;
+  right: 65rem;
+  z-index: -1;
+  bottom: 8rem;
+}
 a {
   text-decoration: none;
   color: #5cb874;
@@ -53,15 +59,18 @@ h6 {
   position: absolute;
   width: 20%;
   left: 60%;
+  background-color: transparent;
 }
 
 .row3 img {
   width: 50%;
   position: relative;
-  left: 60%;
+  right: 50%;
+  bottom: 5rem
 }
 .card {
   border:none;
+  background-color: transparent;
 }
 .card-body {
   display: flex;
@@ -69,6 +78,7 @@ h6 {
   align-items: center;
   background-color: #82CD47;
   border-radius: 20px;
+  box-shadow: 1px 1.5px 5px 1.5px rgb(140, 227, 149);
 }
 .card-title {
   font-family: 'Varela Round';
@@ -87,7 +97,8 @@ h6 {
   width:50%;
   margin: 10px;
   padding: 5px;
-  border: 1px solid black;
+  border:1px rgb(255, 255, 255);
+  box-shadow: 1px 1px 1px 1px gray;
   border-radius: 15px;
   background-color: white;
 }
